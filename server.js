@@ -1,8 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-//import postRouter from './routes/post.routes.js'
 import posts from './routes/posts.routes';
-
+import mongoose from 'mongoose'
 
 
 let app = express();
