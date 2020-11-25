@@ -7,14 +7,14 @@ import posts from './routes/posts.routes';
 
 let app = express();
 
-app.use('/api', posts);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use('/api', posts)
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3005;
 app.listen(
     port,
     console.log('server started - 3005'),
