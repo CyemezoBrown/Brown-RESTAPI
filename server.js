@@ -1,11 +1,9 @@
-//import express from 'express';
-// import bodyParser from 'body-parser';
-// import posts from './routes/posts.routes';
-//import mongoose from 'mongoose'
 const express = require("express")
 const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
 const posts = require("./routes/posts.routes")
+const userRouter = require("./routes/user.route")
+
 
 let app = express();
 
@@ -14,6 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+app.use('/user', userRouter)
 app.use('/api', posts)
 
 
@@ -24,10 +23,10 @@ connection.once('open', () => {
     console.log("MongoDB database connection established successfully");
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3005;
 app.listen(
     port,
-    console.log('server started - 3000'),
+    console.log('server started - 3005'),
 );
 
  module.exports = app;
