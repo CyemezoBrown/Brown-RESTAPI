@@ -1,5 +1,8 @@
-import mongoose from 'mongoose';
-import config from '../config/index';
+// import mongoose from 'mongoose';
+// import config from '../config/index';
+
+const mongoose = require("mongoose")
+const config = require("../config/index")
 
 mongoose.Promise = global.Promise;
 
@@ -14,4 +17,6 @@ const connectToDb = async function() {
     }
 }
 
-export default connectToDb;
+//export default connectToDb;
+
+module.exports = connectToDb;

@@ -1,5 +1,8 @@
-import { Router } from 'express';
-import PostController from '../controllers/post.controller';
+// import { Router } from 'express';
+// import PostController from '../controllers/post.controller';
+
+const { Router} = require("express")
+const PostController = require("../controllers/post.controller")
 
 const router = new Router();
 
@@ -26,4 +29,6 @@ router.put('/posts/:cuid', (req, res) => {
 router.delete('/posts/:cuid', (req, res) => {
     PostController.deletePost(req, res);
 });
-export default router;
+//export default router;
+
+module.exports = router;

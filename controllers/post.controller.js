@@ -1,7 +1,12 @@
-import Post from '../models/post';
-import cuid from 'cuid';
-import slug from 'limax';
-import sanitizeHtml from 'sanitize-html';
+// import Post from '../models/post';
+// import cuid from 'cuid';
+// import slug from 'limax';
+// import sanitizeHtml from 'sanitize-html';
+
+const Post  = require("../models/post")
+const cuid = require("cuid")
+const slug = require("limax")
+const sanitizeHtml = require("sanitize-html")
 
 const PostController = {};
 
@@ -110,4 +115,6 @@ PostController.deletePost = async (req, res) => {
     }
 }
 
-export default PostController;
+//export default PostController;
+
+module.exports = PostController;
