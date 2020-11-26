@@ -16,7 +16,7 @@ app.use('/user', userRouter)
 app.use('/api', posts)
 
 
-const uri = "mongodb+srv://brown:test1234@cluster0.7ajvg.mongodb.net/portfolio?retryWrites=true&w=majority"
+const uri = "mongodb+srv://brown:test1234@cluster0.7ajvg.mongodb.net/portfolio?retryWrites=true;"
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', () => {

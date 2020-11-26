@@ -3,7 +3,7 @@
 // import slug from 'limax';
 // import sanitizeHtml from 'sanitize-html';
 
-const Post  = require("../models/post")
+const Post  = require("../models/post.model")
 const cuid = require("cuid")
 const slug = require("limax")
 const sanitizeHtml = require("sanitize-html")
@@ -38,6 +38,7 @@ const PostController = {};
         catch(err){
     
         }
+    }
 
         //add post to database
         PostController.addPost = async (req, res) => {
@@ -50,7 +51,7 @@ const PostController = {};
         
                 // Sanitize inputs
                 newPost.title = sanitizeHtml(newPost.title);
-                newPost.content = sanitizeHtml(newPost.body);
+                newPost.content = sanitizeHtml(newPost.content);
         
                 newPost.slug = slug(newPost.title.toLowerCase(), { lowercase: true });
                 newPost.cuid = cuid();
@@ -64,9 +65,9 @@ const PostController = {};
             }
             catch (err) {
                 console.log(err);
+                res.status(500).send(err);
             }
         }
-    }
 
 // updating post by cuid
 PostController.updatePost = async (req, res) => {
@@ -105,7 +106,7 @@ PostController.deletePost = async (req, res) => {
                 res.status(500).send(err);
             }
 
-            post.remove(() => {
+            post.remove(() =>{
                 res.status(200).end();
             });
         });
