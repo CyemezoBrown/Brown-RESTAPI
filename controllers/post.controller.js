@@ -11,7 +11,7 @@ const sanitizeHtml = require("sanitize-html")
 const PostController = {};
 
  // Get all post
- PostController.getAll = async (req, res) => {
+ PostController.getAll = async (_req, res) => {
         try {
             await Post.find().sort('-dateAdded').exec((err, posts) => {
                 if (err) {
@@ -95,6 +95,7 @@ PostController.updatePost = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+       // res.status(500).send(err);
     }
 }
 
@@ -106,13 +107,14 @@ PostController.deletePost = async (req, res) => {
                 res.status(500).send(err);
             }
 
-            post.remove(() =>{
-                res.status(200).end();
-            });
+            post.remove({cuid:req.params.cuid }, function (_err, _result) {
+                    res.status(200).end();
+                });
         });
     }
     catch (err) {
         console.log(err);
+       // res.status(500).send(err);
     }
 }
 
