@@ -1,36 +1,16 @@
 {
   "name": "expressapiblog",
-  "version": "1.0.0",
-  "main": "server.js",
-  "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-0": "^6.24.1",
-    "body-parser": "^1.19.0",
-    "cuid": "^2.1.8",
-    "express": "^4.17.1",
-    "limax": "^2.1.0",
-    "sanitize-html": "^2.1.2"
-  },
-  "devDependencies": {
-    "mongoose": "^5.10.15",
-    "nodemon": "^2.0.6"
-  },
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "start": "babel-node server.js --presets env",
-    "dev": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "author": "",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CyemezoBrown/Brown-RESTAPI.git"
-  },
-  "keywords": [],
-  "bugs": {
-    "url": "https://github.com/CyemezoBrown/Brown-RESTAPI/issues"
-  },
-  "homepage": "https://github.com/CyemezoBrown/Brown-RESTAPI#readme",
-  "description": ""
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1"
+  }
 }
