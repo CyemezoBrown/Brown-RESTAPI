@@ -13,6 +13,7 @@ require("dotenv").config()
 let app = express();
 
 const login= require("./routes/login")
+const { json } = require("body-parser")
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -53,8 +54,18 @@ app.use(cookieParser())
         res.status(500).send(err)
     })})
 // app.post('/refresh', refresh)
-
-
+app.use(function(req, res, next){
+    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+        jwt.JsonWebTokenError.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', function (err, decode) {
+            if (err) req.user = undefined;
+            req.user = decode;
+            next();
+        });
+    } else {
+        req.user = undefined;
+        next();
+    }
+})
 const uri = "mongodb+srv://brown:test1234@cluster0.7ajvg.mongodb.net/portfolio?retryWrites=true;"
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
