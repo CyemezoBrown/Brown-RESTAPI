@@ -1,13 +1,16 @@
 const express = require("express")
 const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
+const cookieParser = require('cookie-parser')
 const posts = require("./routes/posts.routes")
 const userRouter = require("./routes/user.route")
-const jwt = require("jsonwebtoken")
+const jwt = require("json-web-token")
+require("dotenv").config()
 
 
 let app = express();
 
+const {login, refresh} = require("./controllers")
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -15,6 +18,10 @@ app.use(bodyParser.urlencoded({
 }));
 app.use('/user', userRouter)
 app.use('/api', posts)
+app.use(cookieParser())
+
+app.post('/login', login)
+app.post('/refresh', refresh)
 
 
 const uri = "mongodb+srv://brown:test1234@cluster0.7ajvg.mongodb.net/portfolio?retryWrites=true;"
