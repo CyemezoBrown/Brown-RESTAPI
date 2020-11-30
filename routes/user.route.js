@@ -2,7 +2,7 @@
 
 const router = require('express').Router();
 let User = require('../models/user.model');
-
+let bcrypt  =require("bcrypt");
 router.route('/').get((req, res) => {
     User.find()
         .then(users => res.json(users))
@@ -12,10 +12,28 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res) => {
     const username = req.body.username;
     const newUser = new User({ username });
-
-    newUser.save()
-        .then(() => res.json('User added!'))
-        .catch(err => res.status(400).json('Error: ' + err));
+    User.find({
+        username: username
+    }).exec().then( (username) =>{
+        if (username.length >=1){
+            return res.status(401).json({
+                message:"username already no available"
+            })        
+        }else{
+            bcrypt.hash(req.body.password,saltRound=10).then(hash=>{
+                const user =new User({
+                    username:req.body.username,
+                    password:hash
+                })
+                user.save().then(result=>{
+                    res.send(result);
+                })
+            })
+        }
+    }
+    ).catch(err=>{
+        res.send(err);
+    })
 })
 
 router.route('/:id').get((req, res) => {

@@ -4,13 +4,15 @@ const bodyParser = require("body-parser")
 const cookieParser = require('cookie-parser')
 const posts = require("./routes/posts.routes")
 const userRouter = require("./routes/user.route")
-const jwt = require("json-web-token")
+const jwt = require("jsonwebtoken")
+const User=require("./models/user.model");
+const  bcrypt =require("bcrypt");
 require("dotenv").config()
 
 
 let app = express();
 
-const {login, refresh} = require("./controllers")
+const login= require("./routes/login")
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -20,8 +22,37 @@ app.use('/user', userRouter)
 app.use('/api', posts)
 app.use(cookieParser())
 
-app.post('/login', login)
-app.post('/refresh', refresh)
+ app.post('/login', (req, res)=>{
+
+    let username = req.body.username
+    let password = req.body.password
+    User.findOne({username:username}).exec()
+    .then(user=>{
+        if(user){
+            bcrypt.compare(req.body.password,user.password,(err,result)=>{
+                if(err){
+                    return res.status(401).json({
+                        message:"Failed to loggin"
+                    })
+                }else if(result){
+                    let accessToken = jwt.sign({
+                        username:req.body.username,
+                        password:req.body.password
+                    }, process.env.ACCESS_TOKEN_SECRET, {
+                        expiresIn: process.env.ACCESS_TOKEN_LIFE
+                    });
+                    res.status(201).json({
+                        message:"logged in successfull",
+                        token:accessToken
+                    })
+
+                }
+            })
+        }
+    }).catch(err=>{
+        res.status(500).send(err)
+    })})
+// app.post('/refresh', refresh)
 
 
 const uri = "mongodb+srv://brown:test1234@cluster0.7ajvg.mongodb.net/portfolio?retryWrites=true;"

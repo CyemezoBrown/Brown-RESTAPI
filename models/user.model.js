@@ -9,12 +9,13 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true,
-        trim: true,
         minlength: 3
-    },
-}, {
-    timestamps: true,
-});
+    }, password:{
+        type: String,
+        required: true,
+        minlength: 3
+    }
+})
 
 const User = mongoose.model('User', userSchema);
 
