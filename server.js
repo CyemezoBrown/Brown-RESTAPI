@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
 const posts = require("./routes/posts.routes")
 const userRouter = require("./routes/user.route")
+const jwt = require("jsonwebtoken")
 
 
 let app = express();
