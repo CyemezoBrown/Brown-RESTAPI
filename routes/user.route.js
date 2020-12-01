@@ -3,10 +3,47 @@
 const router = require('express').Router();
 let User = require('../models/user.model');
 let bcrypt  =require("bcrypt");
-router.route('/').get((req, res) => {
-    User.find()
-        .then(users => res.json(users))
-        .catch(err => res.status(400).json('Error: ' + err));
+router.post('/login', (req, res) => {
+    // User.find()
+    //     .then(users => res.json(users))
+    //     .catch(err => res.status(400).json('Error: ' + err));
+    let username = req.body.username
+    let password = req.body.password
+  //  console.log(User)
+    User.findOne({username:username}).exec()
+    .then(user=>{
+        if(user){
+            bcrypt.compare(req.body.password,user.password,(err,result)=>{
+                if (err){
+                    return res.status(401).json({
+                        message:"Failed to loggin"
+                    })
+                }else if(result){
+                    let accessToken = jwt.sign({
+                        username:req.body.username,
+                        password:req.body.password
+                    }, process.env.ACCESS_TOKEN_SECRET, {
+                        expiresIn: process.env.ACCESS_TOKEN_LIFE
+                    });
+                    res.status(201).json({
+                        message:"logged in successfull",
+                        token:accessToken
+                    })
+
+                } else {
+                    res.status(200).json({
+                        message:"successful",
+                    })
+                }
+            })
+        } else {
+            res.status(404).json({
+                message:"not found",
+            })
+        }
+    }).catch(err=>{
+        res.status(500).send(err)
+    }) 
 });
 
 router.route('/add').post((req, res) => {

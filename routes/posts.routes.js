@@ -5,14 +5,11 @@ const { Router} = require("express")
 const PostController = require("../controllers/post.controller")
 
 const router = new Router();
-const {verify} = require('../controllers/middleware')
+const verify = require('../controllers/middleware')
 // Get all Posts
-router.get('/posts', (req, res) => {
-    verify, PostController.getAll(req, res);
-    
-
+router.get('/posts', (req, res) =>{
+ PostController.getAll(req,res);
 });
-
 // Get one post by cuid
 router.get('/posts/:cuid', (req, res) =>{
     PostController.getPost(req,res);
@@ -26,10 +23,11 @@ router.put('/posts/:cuid', (req, res) => {
     PostController.updatePost(req, res);
 });
 
-// Delete a post by cuid
-router.delete('/posts/:cuid', (req, res) => {
-    PostController.deletePost(req, res);
-});
-//export default router;
-
 module.exports = router;
+// // Delete a post by cuid
+// router.delete('/posts/:cuid', (req, res) => {
+//     PostController.deletePost(req, res);
+// });
+// //export default router;
+
+// module.exports = router;

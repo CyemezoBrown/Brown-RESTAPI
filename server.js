@@ -9,10 +9,8 @@ const User=require("./models/user.model");
 const  bcrypt =require("bcrypt");
 require("dotenv").config()
 
-
 let app = express();
 
-const login= require("./routes/login")
 const { json } = require("body-parser")
 
 app.use(bodyParser.json());
@@ -23,37 +21,9 @@ app.use('/user', userRouter)
 app.use('/api', posts)
 app.use(cookieParser())
 
- app.post('/login', (req, res)=>{
+app.post('/login', )
+ 
 
-    let username = req.body.username
-    let password = req.body.password
-    User.findOne({username:username}).exec()
-    .then(user=>{
-        if(user){
-            bcrypt.compare(req.body.password,user.password,(err,result)=>{
-                if(err){
-                    return res.status(401).json({
-                        message:"Failed to loggin"
-                    })
-                }else if(result){
-                    let accessToken = jwt.sign({
-                        username:req.body.username,
-                        password:req.body.password
-                    }, process.env.ACCESS_TOKEN_SECRET, {
-                        expiresIn: process.env.ACCESS_TOKEN_LIFE
-                    });
-                    res.status(201).json({
-                        message:"logged in successfull",
-                        token:accessToken
-                    })
-
-                }
-            })
-        }
-    }).catch(err=>{
-        res.status(500).send(err)
-    })})
-// app.post('/refresh', refresh)
 app.use(function(req, res, next){
     if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
         jwt.JsonWebTokenError.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', function (err, decode) {
@@ -66,6 +36,7 @@ app.use(function(req, res, next){
         next();
     }
 })
+
 const uri = "mongodb+srv://brown:test1234@cluster0.7ajvg.mongodb.net/portfolio?retryWrites=true;"
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
