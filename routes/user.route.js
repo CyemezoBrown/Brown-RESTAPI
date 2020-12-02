@@ -16,7 +16,7 @@ router.post('/login', (req, res) => {
             bcrypt.compare(req.body.password,user.password,(err,result)=>{
                 if (err){
                     return res.status(401).json({
-                        message:"Failed to loggin"
+                        message:"Failed to login"
                     })
                 }else if(result){
                     let accessToken = jwt.sign({
