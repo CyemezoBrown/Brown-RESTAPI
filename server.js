@@ -4,15 +4,14 @@ const bodyParser = require("body-parser")
 const cookieParser = require('cookie-parser')
 const posts = require("./routes/posts.routes")
 const userRouter = require("./routes/user.route")
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 const jwt = require("jsonwebtoken")
 const User =require("./models/user.model");
 const  bcrypt =require("bcrypt");
 const createError = require('http-errors');
 const path = require('path');
 const logger = require('morgan');
-
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 
 require("dotenv").config()
 
