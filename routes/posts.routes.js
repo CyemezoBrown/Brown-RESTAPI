@@ -1,14 +1,18 @@
 // import { Router } from 'express';
 // import PostController from '../controllers/post.controller';
 
-const { Router} = require("express")
+const  { Router } = require("express")
 const PostController = require("../controllers/post.controller")
 
+//let authenticateJWT;
 const router = new Router();
-const verify = require('../controllers/middleware')
+const authenticateJWT = require('../controllers/middleware')
 // Get all Posts
-router.get('/', (req, res) =>{
+router.get('/',(req, res) =>{
  PostController.getAll(req,res);
+}),
+router.get('/', authenticateJWT, (req, res) => {
+    res.json(post);
 });
 // Get one post by cuid
 router.get('/:cuid', (req, res) =>{
