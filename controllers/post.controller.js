@@ -8,10 +8,10 @@ const cuid = require("cuid")
 const slug = require("limax")
 const sanitizeHtml = require("sanitize-html")
 
-const PostController = {};
+
 
  // Get all post
- PostController.getAll = async (_req, res) => {
+  const getAll = async (_req, res) => {
         try {
             await Post.find().sort('-dateAdded').exec((err, posts) => {
                 if (err) {
@@ -26,7 +26,7 @@ const PostController = {};
     };
 
     // Get post by ID and returns it
-    PostController.getPost = async (req, res) => {
+    const getPost = async (req, res) => {
         try{
             Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
                 if (err) {
@@ -41,10 +41,13 @@ const PostController = {};
     }
 
         //add post to database
-        PostController.addPost = async (req, res) => {
+    const addPost = async (req, res) => {
             try {
                 if (!req.body.post.title || !req.body.post.content) {
-                    res.status(403).end();
+                    res.status(403).send({
+                        message: "cannot post with empty field"
+
+                    });
                 }
         
                 const newPost = new Post(req.body.post);
@@ -70,7 +73,7 @@ const PostController = {};
         }
 
 // updating post by cuid
-PostController.updatePost = async (req, res) => {
+const updatePost = async (req, res) => {
     try {
         if (!req.body.post.title || !req.body.post.content) {
             res.status(403).end();
@@ -100,7 +103,7 @@ PostController.updatePost = async (req, res) => {
 }
 
 // delete post by cuid
-PostController.deletePost = async (req, res) => {
+const deletePost = async (req, res) => {
     try {
         Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
             if (err) {
@@ -120,4 +123,10 @@ PostController.deletePost = async (req, res) => {
 
 //export default PostController;
 
-module.exports = PostController;
+module.exports = {
+    getAll,
+    getPost,
+    addPost,
+    updatePost,
+    deletePost       
+}

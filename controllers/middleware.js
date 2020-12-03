@@ -1,6 +1,7 @@
+ require('dotenv').config()
  const jwt = require('jsonwebtoken')
- 
- authenticateJWT = (req, res, next) => {
+ const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+ const authenticateJWT = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (authHeader) {
@@ -8,9 +9,13 @@
 
         jwt.verify(token, accessTokenSecret, (err, user) => {
             if (err) {
-                return res.sendStatus(403);
+                return res.status(403).send({
+                    message : "Invalid token"
+                    
+                });
             }
-
+            const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '20m' });
+            res.header("Autherization", accessToken);
             req.user = user;
             next();
         });
@@ -19,7 +24,7 @@
     }
 };
 
-
+module.exports = {authenticateJWT}
 // module.exports = function (req,res,next){
 //     const accessToken = req.header("auth")
    

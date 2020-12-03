@@ -5,19 +5,16 @@ let User = require('../models/user.model');
 let bcrypt  =require("bcrypt");
 const jwt = require("jsonwebtoken")
 
-router.post('/login', (req, res) => {
-    // User.find()
-    //     .then(users => res.json(users))
-    //     .catch(err => res.status(400).json('Error: ' + err));
+router.post('/login',async (req, res) => {
     let username = req.body.username
-    let password = req.body.password
-  //  console.log(User)
-    User.findOne({username:username, password:password}).exec()
+    let hash = await  bcrypt.hash(req.body.password,saltRound=10).then(hash => hash)
+    User.findOne({username:username}).exec()
     .then(user=>{
         if(user){
             let accessToken;
            // let refreshToken;
             bcrypt.compare(req.body.password,user.password,(err,result)=>{
+                console.log(result)
                 if (err){
                     return res.status(401).json({
                         message:"Failed to login"
@@ -28,15 +25,8 @@ router.post('/login', (req, res) => {
                     }, process.env.ACCESS_TOKEN_SECRET, {
                         expiresIn: process.env.ACCESS_TOKEN_LIFE
                     });
-                    // refreshToken = jwt.sign({
-                    //     username:req.body.username,                       
-                    // }, process.env.REFRESH_TOKEN_SECRET, {
-                    //     expiresIn: process.env.REFRESH_TOKEN_LIFE
-                    // }); refreshTokens.push(refreshTokens);
-                    
-                    res.status(201).json({
+                    res.status(200).json({
                         accessToken,
-                     //   refreshToken
                     })
 
                 } else {
@@ -45,58 +35,20 @@ router.post('/login', (req, res) => {
                     }, process.env.ACCESS_TOKEN_SECRET, {
                         expiresIn: process.env.ACCESS_TOKEN_LIFE
                     });
-                    // refreshToken = jwt.sign({
-                    //     username:req.body.username,                       
-                    // }, process.env.REFRESH_TOKEN_SECRET, {
-                    //     expiresIn: process.env.REFRESH_TOKEN_LIFE
-                    // }); refreshTokens.push(refreshTokens);
-
-                    res.status(200).json({                                            
-                        accessToken,
-                    //   refreshToken
+                    res.status(403).send({
+                        message : "Forbidden"
                     })
                 }
             })
         } else {
             res.status(404).json({
-                message:"username or password incorrect",
-                              
+                message:"username or password incorrect",                              
             })
         }
     }).catch(err=>{
         res.status(500).send(err)
     }) 
 });
-// router.post('/token', (req, res) => {
-//     const { token } = req.body;
-
-//     if (!token) {
-//         return res.sendStatus(401);
-//     }
-
-//     if (!refreshTokens.includes(token)) {
-//         return res.sendStatus(403);
-//     }
-
-//     jwt.verify(token, refreshTokenSecret, (err, user) => {
-//         if (err) {
-//             return res.sendStatus(403);
-//         }
-
-//         const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '20m' });
-
-//         res.json({
-//             accessToken
-//         });
-//     });
-// });
-// router.post('/logout', (req, res) => {
-//     const { token } = req.body;
-//     refreshTokens = refreshTokens.filter(token => t !== token);
-
-//     res.send("Logout successful");
-// });
-
 router.post('/add').post((req, res) => {
     const username = req.body.username;
     const newUser = new User({ username });
