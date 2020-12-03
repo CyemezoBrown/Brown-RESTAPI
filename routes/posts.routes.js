@@ -7,25 +7,25 @@ const PostController = require("../controllers/post.controller")
 const router = new Router();
 const verify = require('../controllers/middleware')
 // Get all Posts
-router.get('/posts', (req, res) =>{
+router.get('/', (req, res) =>{
  PostController.getAll(req,res);
 });
 // Get one post by cuid
-router.get('/posts/:cuid', (req, res) =>{
+router.get('/:cuid', (req, res) =>{
     PostController.getPost(req,res);
 });
 // Add a new Post
-router.post('/posts', (req, res) => {
+router.post('/add', (req, res) => {
     PostController.addPost(req, res);
 });
 
-router.put('/posts/:cuid', (req, res) => {
+router.put('/:cuid', (req, res) => {
     PostController.updatePost(req, res);
 });
 
 module.exports = router;
 // // Delete a post by cuid
-// router.delete('/posts/:cuid', (req, res) => {
+// router.delete('/:cuid', (req, res) => {
 //     PostController.deletePost(req, res);
 // });
 // //export default router;
