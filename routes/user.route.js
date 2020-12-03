@@ -16,6 +16,7 @@ router.post('/login', (req, res) => {
     .then(user=>{
         if(user){
             let accessToken;
+            let refreshToken;
             bcrypt.compare(req.body.password,user.password,(err,result)=>{
                 if (err){
                     return res.status(401).json({
@@ -52,7 +53,7 @@ router.post('/login', (req, res) => {
 
                     res.status(200).json({                                            
                         accessToken,
-                        refreshToken
+                       refreshToken
                     })
                 }
             })
