@@ -16,7 +16,7 @@ router.post('/login', (req, res) => {
     .then(user=>{
         if(user){
             let accessToken;
-            let refreshToken;
+           // let refreshToken;
             bcrypt.compare(req.body.password,user.password,(err,result)=>{
                 if (err){
                     return res.status(401).json({
@@ -28,15 +28,15 @@ router.post('/login', (req, res) => {
                     }, process.env.ACCESS_TOKEN_SECRET, {
                         expiresIn: process.env.ACCESS_TOKEN_LIFE
                     });
-                    refreshToken = jwt.sign({
-                        username:req.body.username,                       
-                    }, process.env.REFRESH_TOKEN_SECRET, {
-                        expiresIn: process.env.REFRESH_TOKEN_LIFE
-                    }); refreshTokens.push(redreshTokens);
+                    // refreshToken = jwt.sign({
+                    //     username:req.body.username,                       
+                    // }, process.env.REFRESH_TOKEN_SECRET, {
+                    //     expiresIn: process.env.REFRESH_TOKEN_LIFE
+                    // }); refreshTokens.push(redreshTokens);
                     
                     res.status(201).json({
                         accessToken,
-                        refreshToken
+                     //   refreshToken
                     })
 
                 } else {
@@ -45,15 +45,15 @@ router.post('/login', (req, res) => {
                     }, process.env.ACCESS_TOKEN_SECRET, {
                         expiresIn: process.env.ACCESS_TOKEN_LIFE
                     });
-                    refreshToken = jwt.sign({
-                        username:req.body.username,                       
-                    }, process.env.REFRESH_TOKEN_SECRET, {
-                        expiresIn: process.env.REFRESH_TOKEN_LIFE
-                    }); refreshTokens.push(refreshTokens);
+                    // refreshToken = jwt.sign({
+                    //     username:req.body.username,                       
+                    // }, process.env.REFRESH_TOKEN_SECRET, {
+                    //     expiresIn: process.env.REFRESH_TOKEN_LIFE
+                    // }); refreshTokens.push(refreshTokens);
 
                     res.status(200).json({                                            
                         accessToken,
-                       refreshToken
+                    //   refreshToken
                     })
                 }
             })
