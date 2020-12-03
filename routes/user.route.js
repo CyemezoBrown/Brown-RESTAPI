@@ -24,37 +24,76 @@ router.post('/login', (req, res) => {
                 }else if(result){
                      accessToken = jwt.sign({
                         username:req.body.username,
-                        //password:req.body.password
                     }, process.env.ACCESS_TOKEN_SECRET, {
                         expiresIn: process.env.ACCESS_TOKEN_LIFE
                     });
+                    refreshToken = jwt.sign({
+                        username:req.body.username,                       
+                    }, process.env.REFRESH_TOKEN_SECRET, {
+                        expiresIn: process.env.REFRESH_TOKEN_LIFE
+                    }); refreshTokens.push(redreshTokens);
+                    
                     res.status(201).json({
-                       // message:"logged in successfull",
-                        accessToken
+                        accessToken,
+                        refreshToken
                     })
 
                 } else {
                     accessToken = jwt.sign({
-                        username:req.body.username,
-                        //password:req.body.password
+                        username:req.body.username,                       
                     }, process.env.ACCESS_TOKEN_SECRET, {
                         expiresIn: process.env.ACCESS_TOKEN_LIFE
                     });
-                    res.status(200).json({
-                        //message:"successful",                     
-                        accessToken
+                    refreshToken = jwt.sign({
+                        username:req.body.username,                       
+                    }, process.env.REFRESH_TOKEN_SECRET, {
+                        expiresIn: process.env.REFRESH_TOKEN_LIFE
+                    }); refreshTokens.push(redreshTokens);
+
+                    res.status(200).json({                                            
+                        accessToken,
+                        refreshToken
                     })
                 }
             })
         } else {
             res.status(404).json({
-                message:"user not found",
+                message:"username or password incorrect",
                               
             })
         }
     }).catch(err=>{
         res.status(500).send(err)
     }) 
+});
+router.post('/token', (req, res) => {
+    const { token } = req.body;
+
+    if (!token) {
+        return res.sendStatus(401);
+    }
+
+    if (!refreshTokens.includes(token)) {
+        return res.sendStatus(403);
+    }
+
+    jwt.verify(token, refreshTokenSecret, (err, user) => {
+        if (err) {
+            return res.sendStatus(403);
+        }
+
+        const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '20m' });
+
+        res.json({
+            accessToken
+        });
+    });
+});
+router.post('/logout', (req, res) => {
+    const { token } = req.body;
+    refreshTokens = refreshTokens.filter(token => t !== token);
+
+    res.send("Logout successful");
 });
 
 router.post('/add').post((req, res) => {
@@ -65,7 +104,7 @@ router.post('/add').post((req, res) => {
     }).exec().then( (username) =>{
         if (username.length >=1){
             return res.status(401).json({
-                message:"username already no available"
+                message:"username already not available"
             })        
         }else{
             bcrypt.hash(req.body.password,saltRound=10).then(hash=>{
