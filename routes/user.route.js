@@ -89,12 +89,12 @@ router.post('/token', (req, res) => {
         });
     });
 });
-router.post('/logout', (req, res) => {
-    const { token } = req.body;
-    refreshTokens = refreshTokens.filter(token => t !== token);
+// router.post('/logout', (req, res) => {
+//     const { token } = req.body;
+//     refreshTokens = refreshTokens.filter(token => t !== token);
 
-    res.send("Logout successful");
-});
+//     res.send("Logout successful");
+// });
 
 router.post('/add').post((req, res) => {
     const username = req.body.username;
