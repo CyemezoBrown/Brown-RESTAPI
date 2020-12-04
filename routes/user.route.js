@@ -12,7 +12,6 @@ router.post('/login',async (req, res) => {
     .then(user=>{
         if(user){
             let accessToken;
-           // let refreshToken;
             bcrypt.compare(req.body.password,user.password,(err,result)=>{
                 console.log(result)
                 if (err){
@@ -77,17 +76,12 @@ router.post('/add').post((req, res) => {
 })
 
 router.post('/:id').get((req, res) => {
+    // const username = req.body.username;
+    // const newUser = new User({ username });
     User.findById(req.params.id)
         .then(exercise => res.json(exercise))
         .catch(err => res.status(400).json('Error: ' + err));
 });
-
-router.post('/:id').delete((req, res) => {
-    User.findByIdAndDelete(req.params.id)
-        .then(() => res.json('User deleted.'))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
-
 router.post('/:id').put((req, res) => {
     User.findById(req.params.id)
         .then(user => {
@@ -99,5 +93,11 @@ router.post('/:id').put((req, res) => {
         })
         .catch(err => res.status(400).json('Error: ' + err));
 });
+router.post('/:id').delete((req, res) => {
+    User.findByIdAndDelete(req.params.id)
+        .then(() => res.json('User deleted.'))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 
 module.exports = router;
