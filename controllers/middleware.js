@@ -13,7 +13,7 @@
                     message : "Invalid token"                   
                 });
             }
-            const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '20m' });
+            const accessToken = jwt.sign({ username: user.username }, accessTokenSecret, { expiresIn: '20m' });
             res.header("Autherization", accessToken);
             req.user = user;
             next();

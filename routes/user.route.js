@@ -76,8 +76,6 @@ router.post('/add').post((req, res) => {
 })
 
 router.post('/:id').get((req, res) => {
-    // const username = req.body.username;
-    // const newUser = new User({ username });
     User.findById(req.params.id)
         .then(exercise => res.json(exercise))
         .catch(err => res.status(400).json('Error: ' + err));
