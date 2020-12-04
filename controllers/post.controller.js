@@ -101,7 +101,9 @@ const deletePost = async (req, res) => {
             }
 
             post.remove({cuid:req.params.cuid }, function (_err, _result) {
-                    res.status(200).end();
+                    res.status(200).send({
+                        message: "Post have been deleted"
+                    });
                 });
         });
     }
