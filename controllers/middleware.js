@@ -1,6 +1,7 @@
  require('dotenv').config()
  const jwt = require('jsonwebtoken')
  const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+ //const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
  const authenticateJWT = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
@@ -15,6 +16,8 @@
             }
             const accessToken = jwt.sign({ username: user.username }, accessTokenSecret, { expiresIn: '20m' });
             res.header("Autherization", accessToken);
+            //const refreshToken = jwt.sign({ username: user.username }, refreshTokenSecret, { expiresIn: '20m' });
+            //res.header("Autherization", refreshToken);
             req.user = user;
             next();
         });
