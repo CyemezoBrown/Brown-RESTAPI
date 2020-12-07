@@ -11,8 +11,8 @@
                     message : "Invalid token"                   
                 });
             }
-            const accessToken = jwt.sign({ username: user.username }, accessTokenSecret, { expiresIn: '20m' });
-            res.header("Autherization", accessToken);
+             const accessToken = jwt.sign({ username: user.username }, accessTokenSecret, { expiresIn: '20m' });
+             res.header("Autherization", accessToken);
             req.user = user;
             next();
         });

@@ -1,36 +1,40 @@
 const Post  = require("../models/post.model")
 const cuid = require("cuid")
 const slug = require("limax")
-const sanitizeHtml = require("sanitize-html")
+const sanitizeHtml = require("sanitize-html");
+const { all } = require("../server");
 
 // Get all post
   const getAll = async (_req, res) => {
-        try {
             await Post.find().sort('-dateAdded').exec((err, posts) => {
-                if (err) {
-                    res.status(500).send(err);
-                }
+                // if (err) {
+                //    // res.status(500).send(err);
+                //    res.json({ posts });
+                // }
                 res.json({ posts });
             });
-        }
-        catch(err) {
-            res.send(err);
-        }
+        // }
+        // catch(err) {
+        //     res.status(500).send(err);
+        // }
     };
 
 // Get post by ID and returns it
     const getPost = async (req, res) => {
-        try{
+     //   try{
             Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
-                if (err) {
+                if (err || !post) {
+                    // console.log(err)
+                    // console.log(post)
                     res.status(500).send(err);
-                }
+                }else{
                 res.json({ post });
+                }
             });
-        }
-        catch(err){
-    
-        }
+        // }
+        // catch(err){
+        //     res.status(500).send(err);
+        // }
     }
 
 //add post to database
@@ -88,13 +92,12 @@ const updatePost = async (req, res) => {
     }
     catch (err) {
         console.log(err);
-       // res.status(500).send(err);
+        res.status(500).send(err);
     }
 }
 
 // delete post by cuid
 const deletePost = async (req, res) => {
-    try {
         Post.findOneAndDelete({cuid:req.params.cuid }, function (err, result) {
                 if (err) {
                     res.status(500).send(err);
@@ -103,11 +106,6 @@ const deletePost = async (req, res) => {
                         message: "Post have been deleted"
                     });
                 });
-        }
-    catch (err) {
-        console.log(err);
-    }
-
 }
 //export default PostController;
 

@@ -48,8 +48,4 @@ router.post('/login',async (req, res) => {
         res.status(500).send(err)
     }) 
 });
-
-
-
-
 module.exports = router;
