@@ -10,9 +10,9 @@ router.get('/', getAll);
 router.get('/:cuid', getPost);
 router.post('/add', authenticateJWT);
 router.post('/add', addPost);
-router.post('/:cuid', authenticateJWT);
+router.put('/:cuid', authenticateJWT);
 router.put('/:cuid', updatePost);
-router.post('/:cuid', authenticateJWT);
+router.delete('/:cuid', authenticateJWT);
 router.delete('/:cuid', deletePost);
 
 module.exports = router;

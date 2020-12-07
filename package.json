@@ -4,12 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test-coverage": "nyc mocha --timeout 10000 --exit",
+    "test": "mocha --timeout 10000 --exit"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "cookie-parser": "~1.4.4",
+    "coveralls": "^3.1.0",
     "cuid": "^2.1.8",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
@@ -18,9 +23,11 @@
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.5.1",
     "limax": "^2.1.0",
+    "mocha": "^8.2.1",
     "mongoose": "^5.11.1",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.6",
+    "nyc": "^15.1.0",
     "sanitize-html": "^2.1.2"
   }
 }

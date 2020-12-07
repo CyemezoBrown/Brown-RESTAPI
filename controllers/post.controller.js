@@ -95,24 +95,20 @@ const updatePost = async (req, res) => {
 // delete post by cuid
 const deletePost = async (req, res) => {
     try {
-        Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
-            if (err) {
-                res.status(500).send(err);
-            }
-
-            post.remove({cuid:req.params.cuid }, function (_err, _result) {
+        Post.findOneAndDelete({cuid:req.params.cuid }, function (err, result) {
+                if (err) {
+                    res.status(500).send(err);
+                }
                     res.status(200).send({
                         message: "Post have been deleted"
                     });
                 });
-        });
-    }
+        }
     catch (err) {
         console.log(err);
-       // res.status(500).send(err);
     }
-}
 
+}
 //export default PostController;
 
 module.exports = {
