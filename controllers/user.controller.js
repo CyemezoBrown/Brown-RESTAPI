@@ -9,21 +9,24 @@ let bcrypt = require('bcrypt');
     const userExist = await User.findOne ({username: req.body.username})
 
     if(userExist) return res.status(400).send({message:'User already exists', user: userExist})
-    const h = bcrypt.hashSync( req.body.password, 10);
-    // create a new user
+    const h = bcrypt.hashSync(req.body.password, 10);
 
+    // creating a new user
     const user = new User({
       username:req.body.username,
       password:h
     })
       user.save().then((newUser)=>{
-        res.send({user:newUser})
+        res.status(200).send({
+            user:newUser,
+            message: "Registered successful"
+        })
       }).catch((err)=>{
-        // console.log("error  ===", req.body, err);
         res.status(400).send({error:err.message})
       })
   }
-    //LOGIN
+    //login
+    
     exports.login  = async(req,res) =>{
       User.find({username: req.body.username})
       .exec()
@@ -35,16 +38,17 @@ let bcrypt = require('bcrypt');
                     token = jwt.sign({
                     username:req.body.username,
                         }, process.env.ACCESS_TOKEN_SECRET, {
-                            expiresIn: process.env.ACCESS_TOKEN_LIFE
+                            expiresIn: '5h' 
                         })
-                  return res.status(200).json({
+                     res.status(200).json({
                       message: "login in successfully",
                       token: token
                   })
               }
               else{
-  
-                  return res.status(400).send({message: "username or password is incorrect"})
+                  return res.status(400).send({
+                      message: "username or password is incorrect"
+                    })
               }
           });
       })

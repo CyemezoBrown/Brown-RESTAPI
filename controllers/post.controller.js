@@ -7,36 +7,23 @@ const { all } = require("../server");
 // Get all post
   const getAll = async (_req, res) => {
             await Post.find().sort('-dateAdded').exec((err, posts) => {
-                // if (err) {
-                //    // res.status(500).send(err);
-                //    res.json({ posts });
-                // }
+                if (err || !posts) {
+                    res.status(500).send(err);
+                }else{
                 res.json({ posts });
+                }
             });
-        // }
-        // catch(err) {
-        //     res.status(500).send(err);
-        // }
     };
-
 // Get post by ID and returns it
     const getPost = async (req, res) => {
-     //   try{
             Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
                 if (err || !post) {
-                    // console.log(err)
-                    // console.log(post)
                     res.status(500).send(err);
                 }else{
                 res.json({ post });
                 }
             });
-        // }
-        // catch(err){
-        //     res.status(500).send(err);
-        // }
     }
-
 //add post to database
     const addPost = async (req, res) => {
             try {
@@ -55,18 +42,13 @@ const { all } = require("../server");
                 newPost.cuid = cuid();
         
                 newPost.save((err, saved) => {
-                    // if (err) {
-                    //     res.status(500).send(err);
-                    // }
                   return res.status(200).json({ post: saved });
                 });
             }
             catch (err) {
-                console.log(err);
                 res.status(500).json({err});
             }
         }
-
 // updating post by cuid
 const updatePost = async (req, res) => {
     try {
@@ -82,33 +64,26 @@ const updatePost = async (req, res) => {
                 post.content = req.body.post.content || post.content;
                 // Save 
                 post.save((err, saved) => {
-                    if (err) {
-                        res.status(500).send(err)
-                    }
                     res.json({ post: saved });
                 });
             }
         });
     }
     catch (err) {
-        console.log(err);
         res.status(500).send(err);
     }
 }
-
 // delete post by cuid
-const deletePost = async (req, res) => {
-        Post.remove({cuid:req.params.cuid }, function (err, result) {
-                if (err) {
-                    res.status(500).send(err);
-                }
-                    res.status(200).send({
-                        message: "Post have been deleted"
-                    });
-                });
+const deletePost = async (req, res) =>{
+    Post.remove({cuid:req.params.cuid }, function (err, result) {
+        if (err) {
+            res.status(500).send(err);
+        }
+        res.status(200).send({
+            message: "Post have been deleted"
+        });
+    });
 }
-//export default PostController;
-
 module.exports = {
     getAll,
     getPost,

@@ -1,52 +1,56 @@
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../server');
-const { should } = require("chai");
+//process.env.NODE_ENV = 'test'
 
-chai.use(chaiHttp);
+const chai = require('chai')
+const chaiHttp = require('chai-http')
+const server = require('../server')
+const User = require('../models/user.model')
+const request = require ('request')
+const { expect } = require('chai')
 
-describe('POST api/user/login', () => {
-    it('it should login ', (done) => {
-        const user = {
-            username : "fidele322",
-            password : "fidele"
-        }
+// const should = chai.should()
+chai.use(chaiHttp)
+const user = {
+    username :"fidele0208",
+    password:'fidele'
+}
+describe('Authentication',() =>{
+    it('It should register a user',(done)=>{
+        chai.request(server)
+        .post('/api/user/register')
+        .send(user)
+        .end((err, res) =>{
+            res.should.have.status(200)
+            res.body.should.be.a('object')
+            res.body.should.have.property('user')
+            res.body.should.have.property('mesage').eql('Registered successful')
+            done()
+        })
+    })
+    it('It should LOGIN a user', (done) => {
         chai.request(server)
         .post('/api/user/login')
         .send(user)
-        .end((err, res) =>{
+        .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');
-            done();
+            res.body.should.have.property('message')
+            res.body.should.have.property('token')
+            token = res.body.token
+            done()
         })
-    });
-
-    it('it should not login a user', (done) => {
+    })
+    it('It should NOT LOGIN a user', (done) => {
         chai.request(server)
         .post('/api/user/login')
         .send({
-            username : "fido",
-            password: "fidele"
+            username: user.username, 
+            password: user.username
         })
         .end((err, res) => {
-            res.should.have.status(404);
-            res.body.should.have.property('message').eql("username or password incorrect")
+            res.should.have.status(400);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message').eql("username or password is incorrect")
             done();
         })
-    })
-
-    // it('it should not login a user', (done) => {
-    //     chai.request(server)
-    //     .post('/api/user/login')
-    //     .send({
-    //         username : "fidele322",
-    //         password: "fido"
-    //     })
-    //     .end((err, res) => {
-    //         res.should.have.status(403);
-    //         res.body.should.have.property('message').eql("Forbidden")
-    //         done();
-    //     })
-    // })
-
-});
+    })  
+})

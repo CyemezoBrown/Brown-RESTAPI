@@ -35,20 +35,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-//app.use('/api/user', userRouter)
 app.use('/api/posts', posts)
-app.use(function(req, res, next) {
-    if (req.headers && req.headers['auth-token']){
-      jsonwebtoken.verify(req.headers['auth-token'], 'RESTFULAPIs', function(err, decode) {
-        if (err) req.user = undefined;
-        req.user = decode;
-        return next();
-      });
-    } else {
-      req.user = undefined;
-      return next();
-    }
-  });
+// app.use(function(req, res, next) {
+//     if (req.headers && req.headers['auth-token']){
+//     //   jsonwebtoken.verify(req.headers['auth-token'], 'RESTFULAPIs', function(err, decode) {
+//     //     if (err) req.user = undefined;
+//     //     req.user = decode;
+//     //     return next();
+//       });
+//     } else {
+//       req.user = undefined;
+//       return next();
+//     }
+//    });
   userroutes(app);
 
 const uri = "mongodb+srv://brown:test1234@cluster0.7ajvg.mongodb.net/portfolio?retryWrites=true;"
