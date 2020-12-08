@@ -3,7 +3,8 @@ const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
 const cookieParser = require('cookie-parser')
 const posts = require("./routes/posts.routes")
-const userRouter = require("./routes/user.route")
+//const userRouter = require("./routes/user.route")
+const userroutes = require('./routes/user.route')
 const indexRouter = require('./routes/index');
 //const usersRouter = require('./routes/users');
 //const userAdmin = require('./routes/login')
@@ -34,31 +35,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/api/user', userRouter)
+//app.use('/api/user', userRouter)
 app.use('/api/posts', posts)
-// app.use(function(err, req, res, next) {
-//     // set locals, only providing error in development
-//     res.locals.message = err.message;
-//     res.locals.error = req.app.get('env') === 'development' ? err : {};
-//     // render the error page
-//     res.status(err.status || 500);
-//     res.render('error');
-//   });
-  app.post('/login')
-
-
-// app.use(function(req, res, next){
-//     if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-//         jwt.JsonWebTokenError.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', function (err, decode) {
-//             if (err) req.user = undefined;
-//             req.user = decode;
-//             next();
-//         });
-//     } else {
-//         req.user = undefined;
-//         next();
-//     }
-// })
+app.use(function(req, res, next) {
+    if (req.headers && req.headers['auth-token']){
+      jsonwebtoken.verify(req.headers['auth-token'], 'RESTFULAPIs', function(err, decode) {
+        if (err) req.user = undefined;
+        req.user = decode;
+        return next();
+      });
+    } else {
+      req.user = undefined;
+      return next();
+    }
+  });
+  userroutes(app);
 
 const uri = "mongodb+srv://brown:test1234@cluster0.7ajvg.mongodb.net/portfolio?retryWrites=true;"
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });

@@ -55,15 +55,15 @@ const { all } = require("../server");
                 newPost.cuid = cuid();
         
                 newPost.save((err, saved) => {
-                    if (err) {
-                        res.status(500).send(err);
-                    }
-                    res.json({ post: saved });
+                    // if (err) {
+                    //     res.status(500).send(err);
+                    // }
+                  return res.status(200).json({ post: saved });
                 });
             }
             catch (err) {
                 console.log(err);
-                res.status(500).send(err);
+                res.status(500).json({err});
             }
         }
 
@@ -98,7 +98,7 @@ const updatePost = async (req, res) => {
 
 // delete post by cuid
 const deletePost = async (req, res) => {
-        Post.findOneAndDelete({cuid:req.params.cuid }, function (err, result) {
+        Post.remove({cuid:req.params.cuid }, function (err, result) {
                 if (err) {
                     res.status(500).send(err);
                 }

@@ -17,7 +17,7 @@ describe('POST api/user/login', () => {
         .end((err, res) =>{
             res.should.have.status(200);
             res.body.should.be.a('object');
-          //  done();
+            done();
         })
     });
 
@@ -35,18 +35,18 @@ describe('POST api/user/login', () => {
         })
     })
 
-    it('it should not login a user', (done) => {
-        chai.request(server)
-        .post('/api/user/login')
-        .send({
-            username : "fidele322",
-            password: "fido"
-        })
-        .end((err, res) => {
-            res.should.have.status(403);
-            res.body.should.have.property('message').eql("Forbidden")
-            done();
-        })
-    })
+    // it('it should not login a user', (done) => {
+    //     chai.request(server)
+    //     .post('/api/user/login')
+    //     .send({
+    //         username : "fidele322",
+    //         password: "fido"
+    //     })
+    //     .end((err, res) => {
+    //         res.should.have.status(403);
+    //         res.body.should.have.property('message').eql("Forbidden")
+    //         done();
+    //     })
+    // })
 
 });

@@ -12,8 +12,8 @@
                 });
             }
              const accessToken = jwt.sign({ username: user.username }, accessTokenSecret, { expiresIn: '20m' });
+             req.user = user;
              res.header("Autherization", accessToken);
-            req.user = user;
             next();
         });
     } else {
