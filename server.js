@@ -36,19 +36,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/api/posts', posts)
+app.use('/api/user', userroutes)
 // app.use(function(req, res, next) {
 //     if (req.headers && req.headers['auth-token']){
-//     //   jsonwebtoken.verify(req.headers['auth-token'], 'RESTFULAPIs', function(err, decode) {
-//     //     if (err) req.user = undefined;
-//     //     req.user = decode;
-//     //     return next();
+//       jsonwebtoken.verify(req.headers['auth-token'], 'RESTFULAPIs', function(err, decode) {
+//         if (err) req.user = undefined;
+//         req.user = decode;
+//         return next();
 //       });
 //     } else {
-//       req.user = undefined;
+//       req.user = undefined; 
 //       return next();
 //     }
 //    });
-  userroutes(app);
+//userroutes(app);
 
 const uri = "mongodb+srv://brown:test1234@cluster0.7ajvg.mongodb.net/portfolio?retryWrites=true;"
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });

@@ -7,11 +7,8 @@ const { all } = require("../server");
 // Get all post
   const getAll = async (_req, res) => {
             await Post.find().sort('-dateAdded').exec((err, posts) => {
-                if (err || !posts) {
-                    res.status(500).send(err);
-                }else{
+
                 res.json({ posts });
-                }
             });
     };
 // Get post by ID and returns it
@@ -42,7 +39,7 @@ const { all } = require("../server");
                 newPost.cuid = cuid();
         
                 newPost.save((err, saved) => {
-                  return res.status(200).json({ post: saved });
+                  return res.status(200).json({ 'post': saved });
                 });
             }
             catch (err) {
@@ -50,11 +47,12 @@ const { all } = require("../server");
             }
         }
 // updating post by cuid
-const updatePost = async (req, res) => {
+const updatePost = (req, res) => {
+    if (!req.body.post.title || !req.body.post.content) {
+        res.status(403).send({'error': "title or content is empty"});
+    }
     try {
-        if (!req.body.post.title || !req.body.post.content) {
-            res.status(403).end();
-        }
+
         Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
             // Handle database errors
             if (err) {
@@ -64,7 +62,7 @@ const updatePost = async (req, res) => {
                 post.content = req.body.post.content || post.content;
                 // Save 
                 post.save((err, saved) => {
-                    res.json({ post: saved });
+                    res.send({ 'post': saved });
                 });
             }
         });
@@ -75,7 +73,7 @@ const updatePost = async (req, res) => {
 }
 // delete post by cuid
 const deletePost = async (req, res) =>{
-    Post.remove({cuid:req.params.cuid }, function (err, result) {
+    Post.deleteOne({'cuid':req.params.cuid }, function (err, result) {
         if (err) {
             res.status(500).send(err);
         }

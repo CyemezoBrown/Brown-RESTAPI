@@ -3,12 +3,12 @@ let jwt = require('jsonwebtoken')
 let bcrypt = require('bcrypt');
  const User = require('../models/user.model')
 
-  exports.register = async (req, res) => {
+  const register = async (req, res) => {
 
     //Checking if the user is already in database
-    const userExist = await User.findOne ({username: req.body.username})
+    const userExist = await User.findOne({'username': req.body.username})
 
-    if(userExist) return res.status(400).send({message:'User already exists', user: userExist})
+    if(userExist) res.status(400).send({message:'User already exists', user: userExist})
     const h = bcrypt.hashSync(req.body.password, 10);
 
     // creating a new user
@@ -22,12 +22,12 @@ let bcrypt = require('bcrypt');
             message: "Registered successful"
         })
       }).catch((err)=>{
-        res.status(400).send({error:err.message})
+        res.status(502).send({error:err.message})
       })
   }
     //login
     
-    exports.login  = async(req,res) =>{
+    const login  = async(req,res) =>{
       User.find({username: req.body.username})
       .exec()
       .then(user => {
@@ -56,4 +56,8 @@ let bcrypt = require('bcrypt');
           res.status(400).send({error: error.message})
       });
 
+}
+module.exports = {
+    register,
+    login
 }
